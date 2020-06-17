@@ -29,10 +29,10 @@ namespace SalesWebMvc.Controllers
         public IActionResult Novo()
         {
             var departamentos = _departamentoService.FindAll();
-            var viewModel = new VendedorFormViewModel{Departamentos = departamentos};
+            var viewModel = new VendedorFormViewModel { Departamentos = departamentos };
             return View(viewModel);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken] // Garante a segurança do form.
         public IActionResult Novo(Vendedor vendedor)
@@ -40,6 +40,30 @@ namespace SalesWebMvc.Controllers
             _vendedorService.Inserir(vendedor);
             return RedirectToAction(nameof(Index));
             // nameOf melhora a manutenção do sistema no futuro, caso mude o Index.
+        }
+
+        public IActionResult Remover(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _vendedorService.FindById(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Remover(int id)
+        {
+            _vendedorService.Remover(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

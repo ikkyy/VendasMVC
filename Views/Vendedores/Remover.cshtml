@@ -1,0 +1,45 @@
+@model SalesWebMvc.Models.Vendedor;
+
+@{
+    ViewData["Title"] =  "Remover Vendedor";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Você tem certeza que deseja remover esse vendedor ?</h3>
+
+<div>
+    <h4>Vendedor</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DataNascimento)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DataNascimento)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SalarioBase)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SalarioBase)
+        </dd>
+    </dl>
+    <form asp-action="Remover">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" class="btn btn-danger" value="Remover" >
+        <a asp-action="Index">Cancelar</a>
+    </form>
+</div>
