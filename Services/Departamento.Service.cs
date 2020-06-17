@@ -10,24 +10,18 @@ using SalesWebMvc.Data;
 
 namespace SalesWebMvc.Services
 {
-    public class VendedorService
+    public class DepartamentoService
     {
         private readonly SalesWebMvcContext _context;
         
-        public VendedorService(SalesWebMvcContext context)
+        public DepartamentoService(SalesWebMvcContext context)
         {
             _context = context;
         }
 
-        public List<Vendedor> FindAll()
+        public List<Departamento> FindAll()
         {
-            return _context.Vendedor.ToList();
-        }
-
-        public void Inserir(Vendedor obj)
-        {
-            _context.Add(obj);
-            _context.SaveChanges();
+            return _context.Departamento.OrderBy(x => x.Nome).ToList();
         }
     }
 }

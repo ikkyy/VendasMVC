@@ -13,10 +13,12 @@ namespace SalesWebMvc.Controllers
     public class VendedoresController : Controller
     {
         private readonly VendedorService _vendedorService;
+        private readonly DepartamentoService _departamentoService;
 
-        public VendedoresController(VendedorService vendedorService)
+        public VendedoresController(VendedorService vendedorService, DepartamentoService departamentoService)
         {
             _vendedorService = vendedorService;
+            _departamentoService = departamentoService;
         }
         public IActionResult Index()
         {
@@ -26,8 +28,11 @@ namespace SalesWebMvc.Controllers
 
         public IActionResult Novo()
         {
-            return View();
+            var departamentos = _departamentoService.FindAll();
+            var viewModel = new VendedorFormViewModel{Departamentos = departamentos};
+            return View(viewModel);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken] // Garante a segurança do form.
         public IActionResult Novo(Vendedor vendedor)
