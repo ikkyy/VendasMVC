@@ -38,6 +38,16 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken] // Garante a segurança do form.
         public IActionResult Novo(Vendedor vendedor)
         {
+            if (!ModelState.IsValid)
+            {
+                var departamentos = _departamentoService.FindAll();
+                var viewModel = new VendedorFormViewModel
+                {
+                    Vendedor = vendedor,
+                    Departamentos = departamentos
+                };
+                return View(vendedor);
+            }
             _vendedorService.Inserir(vendedor);
             return RedirectToAction(nameof(Index));
             // nameOf melhora a manutenção do sistema no futuro, caso mude o Index.
@@ -105,6 +115,16 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Editar(int? id, Vendedor vendedor)
         {
+            if (!ModelState.IsValid)
+            {
+                var departamentos = _departamentoService.FindAll();
+                var viewModel = new VendedorFormViewModel
+                {
+                    Vendedor = vendedor,
+                    Departamentos = departamentos
+                };
+                return View(vendedor);
+            }
             if (id != vendedor.Id)
             {
                 return RedirectToAction(nameof(Erro), new { message = "Os Ids são diferentes." });
