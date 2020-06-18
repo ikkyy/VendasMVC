@@ -14,7 +14,7 @@ namespace SalesWebMvc.Services
     public class VendasRecordService
     {
         private readonly SalesWebMvcContext _context;
-        
+
         public VendasRecordService(SalesWebMvcContext context)
         {
             _context = context;
@@ -27,7 +27,7 @@ namespace SalesWebMvc.Services
             {
                 result = result.Where(x => x.Data >= minDate.Value);
             }
-            if(maxDate.HasValue)
+            if (maxDate.HasValue)
             {
                 result = result.Where(x => x.Data <= maxDate.Value);
             }
@@ -35,6 +35,25 @@ namespace SalesWebMvc.Services
             .Include(x => x.Vendedor)
             .Include(x => x.Vendedor.Departamento)
             .OrderByDescending(x => x.Data)
+            .ToListAsync();
+            // Metodos acima faz o Join do MySQL
+        }
+        public async Task<List<IGrouping<Departamento, VendasRecord>>> FindByDateGroupingAsync(DateTime? minDate, DateTime? maxDate)
+        {
+            var result = from obj in _context.VendasRecord select obj;
+            if (minDate.HasValue)
+            {
+                result = result.Where(x => x.Data >= minDate.Value);
+            }
+            if (maxDate.HasValue)
+            {
+                result = result.Where(x => x.Data <= maxDate.Value);
+            }
+            return await result
+            .Include(x => x.Vendedor)
+            .Include(x => x.Vendedor.Departamento)
+            .OrderByDescending(x => x.Data)
+            .GroupBy(x=> x.Vendedor.Departamento)
             .ToListAsync();
             // Metodos acima faz o Join do MySQL
         }
