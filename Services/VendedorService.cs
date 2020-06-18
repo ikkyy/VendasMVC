@@ -15,7 +15,7 @@ namespace SalesWebMvc.Services
     public class VendedorService
     {
         private readonly SalesWebMvcContext _context;
-        
+
         public VendedorService(SalesWebMvcContext context)
         {
             _context = context;
@@ -39,23 +39,31 @@ namespace SalesWebMvc.Services
 
         public async Task RemoverAsync(int id)
         {
-            var obj = await _context.Vendedor.FindAsync(id);
-            _context.Vendedor.Remove(obj);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var obj = await _context.Vendedor.FindAsync(id);
+                _context.Vendedor.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new IntegrityException("Não é possível remover um Vendedor(a) que possui vendas.");
+            }
         }
 
         public async Task AtualizarAsync(Vendedor obj)
         {
             bool temAlgum = await _context.Vendedor.AnyAsync(x => x.Id == obj.Id);
-            if(!temAlgum)
+            if (!temAlgum)
             {
                 throw new NotFoundException("ID não encontrado.");
             }
-            try {
-            _context.Update(obj);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Update(obj);
+                await _context.SaveChangesAsync();
             }
-            catch(DbUpdateConcurrencyException e)
+            catch (DbUpdateConcurrencyException e)
             {
                 throw new DbConcurrencyException(e.Message);
             }
