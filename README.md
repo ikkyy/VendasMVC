@@ -1,3 +1,6 @@
+Para criar novo projeto C#
+dotnet new console
+
 Para criar Migration
 dotnet ef migrations add NomeMigration
 
